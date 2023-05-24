@@ -1,21 +1,25 @@
-import {mount} from '@vue/test-utils';
-import {expect, test, vi} from 'vitest';
-import ReactiveHash from '../src/components/ReactiveHash.vue';
+import '@testing-library/jest-dom'
+
+import { fireEvent, render, screen } from '@testing-library/svelte'
+import { expect, test, vi } from 'vitest'
+import ReactiveHash from '../src/components/ReactiveHash.svelte'
 
 vi.mock('#preload', () => {
   return {
     sha256sum: vi.fn((s: string) => `${s}:HASHED`),
-  };
-});
+  }
+})
 
-test('ReactiveHash component', async () => {
-  expect(ReactiveHash).toBeTruthy();
-  const wrapper = mount(ReactiveHash);
+describe('ReactiveHash', () => {
+  test('Test inputs', async () => {
+    expect(ReactiveHash).toBeTruthy()
+    render(ReactiveHash)
 
-  const dataInput = wrapper.get<HTMLInputElement>('input:not([readonly])');
-  const hashInput = wrapper.get<HTMLInputElement>('input[readonly]');
+    const dataInput = screen.getByDisplayValue('Hello World')
+    const hashInput = screen.getByDisplayValue('Hello World:HASHED')
 
-  const dataToHashed = Math.random().toString(36).slice(2, 7);
-  await dataInput.setValue(dataToHashed);
-  expect(hashInput.element.value).toBe(`${dataToHashed}:HASHED`);
-});
+    const dataToHashed = Math.random().toString(36).slice(2, 7)
+    await fireEvent.input(dataInput, { target: { value: dataToHashed } })
+    expect(hashInput).toHaveValue(`${dataToHashed}:HASHED`)
+  })
+})

@@ -1,4 +1,5 @@
-import {createApp} from 'vue';
-import App from '/@/App.vue';
+import App from './App.svelte'
 
-createApp(App).mount('#app');
+new App({
+  target: document.getElementById('app')!
+})

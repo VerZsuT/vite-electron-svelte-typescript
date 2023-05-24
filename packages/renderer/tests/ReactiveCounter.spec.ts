@@ -1,14 +1,16 @@
-import {mount} from '@vue/test-utils';
-import {expect, test} from 'vitest';
-import ReactiveCounter from '../src/components/ReactiveCounter.vue';
+import '@testing-library/jest-dom'
 
-test('ReactiveHash component', async () => {
-  expect(ReactiveCounter).toBeTruthy();
-  const wrapper = mount(ReactiveCounter);
+import { fireEvent, render, screen } from '@testing-library/svelte'
+import { describe, expect, test } from 'vitest'
+import ReactiveCounter from '../src/components/ReactiveCounter.svelte'
 
-  const button = wrapper.get('button');
+describe('ReactiveCounter', () => {
+  test('Test counter', async () => {
+    expect(ReactiveCounter).toBeTruthy()
+    render(ReactiveCounter)
 
-  expect(button.text()).toBe('count is: 0');
-  await button.trigger('click');
-  expect(button.text()).toBe('count is: 1');
-});
+    const button = screen.getByText('count is: 0')
+    await fireEvent.click(button)
+    expect(button).toHaveTextContent('count is: 1')
+  })
+})

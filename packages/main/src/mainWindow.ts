@@ -1,5 +1,5 @@
-import {app, BrowserWindow} from 'electron';
-import {join, resolve} from 'node:path';
+import { app, BrowserWindow } from 'electron'
+import { join, resolve } from 'node:path'
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -9,9 +9,9 @@ async function createWindow() {
       contextIsolation: true,
       sandbox: false, // Sandbox disabled because the demo of preload script depend on the Node.js api
       webviewTag: false, // The webview tag is not recommended. Consider alternatives like an iframe or Electron's BrowserView. @see https://www.electronjs.org/docs/latest/api/webview-tag#warning
-      preload: join(app.getAppPath(), 'packages/preload/dist/index.cjs'),
-    },
-  });
+      preload: join(app.getAppPath(), 'packages/preload/dist/index.cjs')
+    }
+  })
 
   /**
    * If the 'show' property of the BrowserWindow's constructor is omitted from the initialization options,
@@ -22,12 +22,12 @@ async function createWindow() {
    * @see https://github.com/electron/electron/issues/25012 for the afford mentioned issue.
    */
   browserWindow.on('ready-to-show', () => {
-    browserWindow?.show();
+    browserWindow?.show()
 
     if (import.meta.env.DEV) {
-      browserWindow?.webContents.openDevTools();
+      browserWindow?.webContents.openDevTools()
     }
-  });
+  })
 
   /**
    * Load the main page of the main window.
@@ -36,7 +36,7 @@ async function createWindow() {
     /**
      * Load from the Vite dev server for development.
      */
-    await browserWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL);
+    await browserWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL)
   } else {
     /**
      * Load from the local file system for production and test.
@@ -47,25 +47,25 @@ async function createWindow() {
      * @see https://github.com/nodejs/node/issues/12682
      * @see https://github.com/electron/electron/issues/6869
      */
-    await browserWindow.loadFile(resolve(__dirname, '../../renderer/dist/index.html'));
+    await browserWindow.loadFile(resolve(__dirname, '../../renderer/dist/index.html'))
   }
 
-  return browserWindow;
+  return browserWindow
 }
 
 /**
  * Restore an existing BrowserWindow or Create a new BrowserWindow.
  */
 export async function restoreOrCreateWindow() {
-  let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed());
+  let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
 
   if (window === undefined) {
-    window = await createWindow();
+    window = await createWindow()
   }
 
   if (window.isMinimized()) {
-    window.restore();
+    window.restore()
   }
 
-  window.focus();
+  window.focus()
 }

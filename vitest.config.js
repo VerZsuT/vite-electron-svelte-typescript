@@ -1,10 +1,11 @@
+import { defineConfig } from 'vite'
+
 /**
  * Configuration for the global end-to-end testing,
  * placed in the project's root 'tests' folder.
- * @type {import('vite').UserConfig}
  * @see https://vitest.dev/config/
  */
-const config = {
+const config = defineConfig( {
   test: {
     /**
      * By default, vitest searches for the test files in all packages.
@@ -17,7 +18,8 @@ const config = {
      */
     testTimeout: 30_000,
     hookTimeout: 30_000,
-  },
-};
+    environment: 'jsdom'
+  }
+} )
 
-export default config;
+export default config
